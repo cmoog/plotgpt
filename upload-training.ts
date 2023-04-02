@@ -1,12 +1,5 @@
-import * as openai from "./openai/mod.ts";
 import { parse } from "https://deno.land/std@0.182.0/yaml/mod.ts";
-
-const apiKey = Deno.env.get("OPENAI_API_KEY");
-if (!apiKey) {
-  throw new Error("OPENAI_API_KEY required");
-}
-
-const client = new openai.OpenAI(apiKey);
+import { client } from "./client.ts";
 
 const yaml = await Deno.readTextFile("./training.yaml");
 const training = parse(yaml) as {
@@ -17,7 +10,6 @@ const training = parse(yaml) as {
 const trainingString = training
   .map(({ prompt, completion }) => JSON.stringify({ prompt, completion }))
   .join("\n");
-
 console.log("uploading training file", { trainingPairs: training.length });
 
 const trainingFile = await client.uploadFile(
@@ -25,7 +17,6 @@ const trainingFile = await client.uploadFile(
   trainingString,
   "fine-tune",
 );
-
 console.log("uploaded file", JSON.stringify(trainingFile, null, 4));
 
 const fineTune = await client.createFineTune({

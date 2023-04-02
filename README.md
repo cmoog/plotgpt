@@ -2,9 +2,9 @@
 
 > **Warning** Work in progress.
 
-A community maintained fine-tuned GPT-3 model for generating data visualizations
-with [Observable Plot](https://github.com/observablehq/plot) from natural
-language descriptions.
+A fine-tuning dataset for generating data visualizations with
+[Observable Plot](https://github.com/observablehq/plot) from natural language
+descriptions using GPT-3.
 
 ## Upload to your own OpenAI Account
 
