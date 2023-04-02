@@ -47,18 +47,20 @@ export class OpenAI {
     options: { method?: string; contentType?: string | null } = {},
   ) {
     if (options.contentType === undefined) {
-      options.contentType = "application/json"
+      options.contentType = "application/json";
     }
     if (!options.method) {
-      options.method = "POST"
+      options.method = "POST";
     }
     const response = await fetch(`${baseUrl}${url}`, {
-      body: options.contentType === 'application/json' ? (body ? JSON.stringify(body) : undefined) : body,
+      body: options.contentType === "application/json"
+        ? (body ? JSON.stringify(body) : undefined)
+        : body,
       headers: {
         Authorization: `Bearer ${this.#privateKey}`,
         ...(
           options.contentType === null ? {} : {
-            "Content-Type": options.contentType
+            "Content-Type": options.contentType,
           }
         ),
       },
@@ -308,11 +310,19 @@ export class OpenAI {
    *
    * https://platform.openai.com/docs/api-reference/files/upload
    */
-  async uploadFile(filename: string, fileContent: string, purpose: string): Promise<File> {
+  async uploadFile(
+    filename: string,
+    fileContent: string,
+    purpose: string,
+  ): Promise<File> {
     const formData = new FormData();
-    formData.append("file", new Blob([fileContent], { type: "text/plain" }), filename)
-    formData.append("purpose", purpose)
-    console.log(formData.getAll("file"))
+    formData.append(
+      "file",
+      new Blob([fileContent], { type: "text/plain" }),
+      filename,
+    );
+    formData.append("purpose", purpose);
+    console.log(formData.getAll("file"));
     return await this.#request(`/files`, formData, {
       method: "POST",
       contentType: null,

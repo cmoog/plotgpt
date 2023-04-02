@@ -9,16 +9,17 @@ if (!apiKey) {
 const client = new openai.OpenAI(apiKey);
 
 const yaml = await Deno.readTextFile("./training.yaml");
-
-const { data: training } = parse(yaml) as {
-  data: { prompt: string; completion: string }[];
-};
+const training = parse(yaml) as {
+  prompt: string;
+  completion: string;
+}[];
 
 const trainingString = training
   .map(({ prompt, completion }) => JSON.stringify({ prompt, completion }))
   .join("\n");
 
-console.log(trainingString);
+console.log("uploading training file", { trainingPairs: training.length });
+
 const trainingFile = await client.uploadFile(
   "plotgpt-training.jsonl",
   trainingString,
@@ -31,4 +32,4 @@ const fineTune = await client.createFineTune({
   model: "davinci",
   trainingFile: trainingFile.id,
 });
-console.log({ fineTune });
+console.log("created fine tune", JSON.stringify(fineTune, null, 4));
