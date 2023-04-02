@@ -1,0 +1,70 @@
+data:
+  - prompt: Plot a simple area chart with "Date" on the x axis and "Close" on the y axis.
+    completion: |
+      Plot.plot({
+        marks: [
+          Plot.areaY(data, {x: "Date", y: "Close"})
+        ]
+      })
+  - prompt: |
+      Plot a simple area chart with Date on the x-axis and Close on the y, filled in with \#ccc.
+      Then plot a line with the same variables.
+      Then plot a horizontal line at y equals 0. Show the chart grid.
+    completion: |
+      Plot.plot({
+        y: {
+          grid: true
+        },
+        marks: [
+          Plot.areaY(data, {x: "Date", y: "Close", fill: "#ccc"}),
+          Plot.lineY(data, {x: "Date", y: "Close"}),
+          Plot.ruleY([0])
+        ]
+      })
+  - prompt: |
+      Plot a simple area chart with Date on the x-axis and Close on the y, filled in with \#ccc.
+      Then plot a line with the same variables.
+      Then plot a horizontal line at y equals 0. Show the chart grid for the y axis, and
+      reverse the y axis direction.
+    completion: |
+      Plot.plot({
+        x: {
+          label: null
+        },
+        y: {
+          grid: true,
+          reverse: true
+        },
+        marks: [
+          Plot.areaY(data, {x: "Date", y: "Close", fill: "#ccc"}),
+          Plot.lineY(data, {x: "Date", y: "Close"}),
+          Plot.ruleY([0])
+        ]
+      })
+  - prompt: |
+      Plot an area chart and a line with the same variables. Normalize the y axis with
+      "median" as the basis. Use "date" as the x axis and "unemployed" for the y axis.
+      Make the area chart semi-transparent and the line have stroke width equal to 1.
+      Split the chart into facets by "industry".
+      Make the height of the chart 600. Don't show the y axis.
+    completion: |
+      Plot.plot({
+        height: 600,
+        y: {
+          axis: null
+        },
+        fy: {
+          axis: "right",
+          label: null
+        },
+        facet: {
+          data: data,
+          y: "industry",
+          marginRight: 140
+        },
+        marks: [
+          Plot.areaY(data, Plot.normalizeY({basis: "median", x: "date", y: "unemployed", fillOpacity: 0.2})),
+          Plot.lineY(data, Plot.normalizeY({basis: "median", x: "date", y: "unemployed", strokeWidth: 1}))
+        ]
+      })
+
